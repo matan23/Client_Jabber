@@ -63,6 +63,15 @@
     [self saveContext];
 }
 
+
+
+#pragma mark - Helpers
+
+- (UIViewController *)instantiateViewControllerWithIdentifier:(NSString *)identifier {
+    return [self.mainStoryboard instantiateViewControllerWithIdentifier:identifier];
+}
+
+
 #pragma mark - Core Data stack
 
 @synthesize managedObjectContext = _managedObjectContext;

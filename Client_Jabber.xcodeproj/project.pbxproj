@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		90D648DD1ACBE9D600394DB3 /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D648DC1ACBE9D600394DB3 /* Friend.m */; };
+		90D648EB1ACBEF9500394DB3 /* FriendStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D648EA1ACBEF9500394DB3 /* FriendStore.m */; };
 		90EB73B91ACBDBA2009207C4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90EB73B81ACBDBA2009207C4 /* main.m */; };
 		90EB73BC1ACBDBA2009207C4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90EB73BB1ACBDBA2009207C4 /* AppDelegate.m */; };
 		90EB73BF1ACBDBA2009207C4 /* Client_Jabber.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 90EB73BD1ACBDBA2009207C4 /* Client_Jabber.xcdatamodeld */; };
@@ -31,6 +33,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		90D648DB1ACBE9D600394DB3 /* Friend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Friend.h; sourceTree = "<group>"; };
+		90D648DC1ACBE9D600394DB3 /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
+		90D648E91ACBEF9500394DB3 /* FriendStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendStore.h; sourceTree = "<group>"; };
+		90D648EA1ACBEF9500394DB3 /* FriendStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendStore.m; sourceTree = "<group>"; };
 		90EB73B31ACBDBA2009207C4 /* Client_Jabber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client_Jabber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90EB73B71ACBDBA2009207C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90EB73B81ACBDBA2009207C4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -71,6 +77,105 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		90D648DE1ACBEEB000394DB3 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Messages;
+			sourceTree = "<group>";
+		};
+		90D648DF1ACBEEB000394DB3 /* Module */ = {
+			isa = PBXGroup;
+			children = (
+				90D648E31ACBEF0F00394DB3 /* Login */,
+				90D648E21ACBEECB00394DB3 /* Friends */,
+				90D648E11ACBEEC300394DB3 /* Chats */,
+				90D648E01ACBEEB100394DB3 /* Settings */,
+				90D648DE1ACBEEB000394DB3 /* Messages */,
+			);
+			name = Module;
+			sourceTree = "<group>";
+		};
+		90D648E01ACBEEB100394DB3 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				90D648E71ACBEF3E00394DB3 /* Store */,
+				90EB73DF1ACBDCF1009207C4 /* SettingsVC.h */,
+				90EB73E01ACBDCF1009207C4 /* SettingsVC.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		90D648E11ACBEEC300394DB3 /* Chats */ = {
+			isa = PBXGroup;
+			children = (
+				90D648E61ACBEF3B00394DB3 /* Store */,
+				90EB73E51ACBDD2D009207C4 /* ChatsVC.h */,
+				90EB73E61ACBDD2D009207C4 /* ChatsVC.m */,
+			);
+			name = Chats;
+			sourceTree = "<group>";
+		};
+		90D648E21ACBEECB00394DB3 /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				90D648E81ACBEF7400394DB3 /* Entities */,
+				90D648E51ACBEF3700394DB3 /* Store */,
+				90EB73E21ACBDCFF009207C4 /* FriendsVC.h */,
+				90EB73E31ACBDCFF009207C4 /* FriendsVC.m */,
+			);
+			name = Friends;
+			sourceTree = "<group>";
+		};
+		90D648E31ACBEF0F00394DB3 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				90D648E41ACBEF3000394DB3 /* Store */,
+				90EB73C01ACBDBA2009207C4 /* LoginVC.h */,
+				90EB73C11ACBDBA2009207C4 /* LoginVC.m */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		90D648E41ACBEF3000394DB3 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Store;
+			sourceTree = "<group>";
+		};
+		90D648E51ACBEF3700394DB3 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				90D648E91ACBEF9500394DB3 /* FriendStore.h */,
+				90D648EA1ACBEF9500394DB3 /* FriendStore.m */,
+			);
+			name = Store;
+			sourceTree = "<group>";
+		};
+		90D648E61ACBEF3B00394DB3 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Store;
+			sourceTree = "<group>";
+		};
+		90D648E71ACBEF3E00394DB3 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Store;
+			sourceTree = "<group>";
+		};
+		90D648E81ACBEF7400394DB3 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				90D648DB1ACBE9D600394DB3 /* Friend.h */,
+				90D648DC1ACBE9D600394DB3 /* Friend.m */,
+			);
+			name = Entities;
+			sourceTree = "<group>";
+		};
 		90EB73AA1ACBDBA2009207C4 = {
 			isa = PBXGroup;
 			children = (
@@ -94,14 +199,7 @@
 			children = (
 				90EB73BA1ACBDBA2009207C4 /* AppDelegate.h */,
 				90EB73BB1ACBDBA2009207C4 /* AppDelegate.m */,
-				90EB73DF1ACBDCF1009207C4 /* SettingsVC.h */,
-				90EB73E01ACBDCF1009207C4 /* SettingsVC.m */,
-				90EB73E21ACBDCFF009207C4 /* FriendsVC.h */,
-				90EB73E31ACBDCFF009207C4 /* FriendsVC.m */,
-				90EB73E51ACBDD2D009207C4 /* ChatsVC.h */,
-				90EB73E61ACBDD2D009207C4 /* ChatsVC.m */,
-				90EB73C01ACBDBA2009207C4 /* LoginVC.h */,
-				90EB73C11ACBDBA2009207C4 /* LoginVC.m */,
+				90D648DF1ACBEEB000394DB3 /* Module */,
 				90EB73C31ACBDBA2009207C4 /* Main.storyboard */,
 				90EB73BD1ACBDBA2009207C4 /* Client_Jabber.xcdatamodeld */,
 				90EB73B61ACBDBA2009207C4 /* Supporting Files */,
@@ -240,9 +338,11 @@
 				90EB73E41ACBDCFF009207C4 /* FriendsVC.m in Sources */,
 				90EB73BC1ACBDBA2009207C4 /* AppDelegate.m in Sources */,
 				90EB73E71ACBDD2D009207C4 /* ChatsVC.m in Sources */,
+				90D648DD1ACBE9D600394DB3 /* Friend.m in Sources */,
 				90EB73E11ACBDCF1009207C4 /* SettingsVC.m in Sources */,
 				90EB73B91ACBDBA2009207C4 /* main.m in Sources */,
 				90EB73C21ACBDBA2009207C4 /* LoginVC.m in Sources */,
+				90D648EB1ACBEF9500394DB3 /* FriendStore.m in Sources */,
 				90EB73BF1ACBDBA2009207C4 /* Client_Jabber.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

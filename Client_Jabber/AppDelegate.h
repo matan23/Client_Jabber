@@ -22,5 +22,7 @@
 
 @property (strong, nonatomic)       UIStoryboard        *mainStoryboard;
 
+- (UIViewController *)instantiateViewControllerWithIdentifier:(NSString *)identifier;
+
 @end
 
