@@ -8,6 +8,10 @@
 
 #import "AppDelegate.h"
 
+#import "XMPPLogging.h"
+
+#import "SessionStore.h"
+
 @interface AppDelegate ()
 
 @end
@@ -17,6 +21,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLogLevel:XMPP_LOG_FLAG_SEND_RECV];
     
     BOOL byPassLoginView;
     NSString *rootVcName;
@@ -30,6 +35,8 @@
     } else {
         rootVcName = @"loginVC";
     }
+    
+    [[SessionStore sharedInstance] createUsingUserID:@"matan@mataejoon.io" andPassword:@"qwe123"];
 
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

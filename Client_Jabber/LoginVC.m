@@ -10,7 +10,12 @@
 
 #import "AppDelegate.h"
 
+#import "SessionStore.h"
+
 @interface LoginVC ()
+
+@property (weak, nonatomic) IBOutlet UITextField *loginTF;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTF;
 
 @end
 
@@ -37,17 +42,19 @@
 #pragma mark - UI Events
 
 - (IBAction)loginBtnTapped:(id)sender {
-    [self connect];
+    
+    [self connectUsingUser:self.loginTF.text andPassword:self.passwordTF.text];
 }
 
 #pragma mark - Helpers To Be Moved?
-- (void)connect {
-//    network call
+- (void)connectUsingUser:(NSString *)user andPassword:(NSString *)password {
     
-//    on success
+    
+    if ([[SessionStore sharedInstance] createUsingUserID:user andPassword:password]) {
         [self connectionSuccess];
-//    on failure
-//    [self connectionFailure];
+    } else {
+        [self connectionFailure];
+    }
 }
 
 - (void)connectionSuccess {
