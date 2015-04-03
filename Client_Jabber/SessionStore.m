@@ -20,6 +20,9 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     XMPPStream          *_stream;
     XMPPReconnect       *_reconnect;
     
+    XMPPRosterCoreDataStorage   *_rosterStorage;
+    XMPPRoster          *_roster;
+    
     BOOL                _isXmppConnected;
     
     NSString            *_password;
@@ -56,6 +59,12 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     _stream = [XMPPStream new];
     _reconnect = [XMPPReconnect new];
     
+    _rosterStorage = [[XMPPRosterCoreDataStorage alloc] initWithInMemoryStore];
+    _roster = [[XMPPRoster alloc] initWithRosterStorage:_rosterStorage];
+    _roster.autoFetchRoster = YES;
+    _roster.autoAcceptKnownPresenceSubscriptionRequests = YES;
+
+    
     [self enableModules:YES];
     [self enableListeners:YES];
     
@@ -65,16 +74,20 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
 - (void)enableModules:(BOOL)flag {
     if (flag == YES) {
         [_reconnect activate:_stream];
+        [_roster activate:_stream];
     } else {
         [_reconnect deactivate];
+        [_roster deactivate];
     }
 }
 
 - (void)enableListeners:(BOOL)flag {
     if (flag == YES) {
         [_stream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+        [_roster addDelegate:self delegateQueue:dispatch_get_main_queue()];
     } else {
         [_stream removeDelegate:self];
+        [_roster removeDelegate:self];
     }
 }
 
@@ -98,6 +111,9 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     
     _stream = nil;
     _reconnect = nil;
+    
+    _rosterStorage = nil;
+    _roster = nil;
 }
 
 - (void)goOnline
@@ -168,13 +184,13 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
 
 
 
+#pragma mark Core Data
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
+- (NSManagedObjectContext *)managedObjectContext_roster
+{
+    return [_rosterStorage mainThreadManagedObjectContext];
+}
 
 
 #pragma mark - XMPSStream Delegate
@@ -297,41 +313,41 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     return NO;
 }
 
-//- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
-//{
-//    DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
-//    
-//    // A simple example of inbound message handling.
-//    
-//    if ([message isChatMessageWithBody])
-//    {
-//        XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[message from]
-//                                                                 xmppStream:xmppStream
-//                                                       managedObjectContext:[self managedObjectContext_roster]];
-//        
-//        NSString *body = [[message elementForName:@"body"] stringValue];
-//        NSString *displayName = [user displayName];
-//        
-//        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-//        {
-//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
-//                                                                message:body
-//                                                               delegate:nil
-//                                                      cancelButtonTitle:@"Ok"
-//                                                      otherButtonTitles:nil];
-//            [alertView show];
-//        }
-//        else
-//        {
-//            // We are not active, so use a local notification instead
-//            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-//            localNotification.alertAction = @"Ok";
-//            localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
-//            
-//            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-//        }
-//    }
-//}
+- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
+{
+    DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+    
+    // A simple example of inbound message handling.
+    
+    if ([message isChatMessageWithBody])
+    {
+        XMPPUserCoreDataStorageObject *user = [_rosterStorage userForJID:[message from]
+                                                                 xmppStream:_stream
+                                                       managedObjectContext:[self managedObjectContext_roster]];
+        
+        NSString *body = [[message elementForName:@"body"] stringValue];
+        NSString *displayName = [user displayName];
+        
+        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+        {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
+                                                                message:body
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Ok"
+                                                      otherButtonTitles:nil];
+            [alertView show];
+        }
+        else
+        {
+            // We are not active, so use a local notification instead
+            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+            localNotification.alertAction = @"Ok";
+            localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
+            
+            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+        }
+    }
+}
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
