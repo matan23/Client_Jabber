@@ -157,6 +157,7 @@
 		905D9A1B1ACE903100BE4CA5 /* SessionStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 905D9A1A1ACE903100BE4CA5 /* SessionStore.m */; };
 		90D648DD1ACBE9D600394DB3 /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D648DC1ACBE9D600394DB3 /* Friend.m */; };
 		90D648EB1ACBEF9500394DB3 /* FriendStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D648EA1ACBEF9500394DB3 /* FriendStore.m */; };
+		90EA39311ADAC48200B059A6 /* MessagesVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 90EA39301ADAC48200B059A6 /* MessagesVC.m */; };
 		90EB73B91ACBDBA2009207C4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90EB73B81ACBDBA2009207C4 /* main.m */; };
 		90EB73BC1ACBDBA2009207C4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90EB73BB1ACBDBA2009207C4 /* AppDelegate.m */; };
 		90EB73BF1ACBDBA2009207C4 /* Client_Jabber.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 90EB73BD1ACBDBA2009207C4 /* Client_Jabber.xcdatamodeld */; };
@@ -487,6 +488,9 @@
 		90D648DC1ACBE9D600394DB3 /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
 		90D648E91ACBEF9500394DB3 /* FriendStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendStore.h; sourceTree = "<group>"; };
 		90D648EA1ACBEF9500394DB3 /* FriendStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendStore.m; sourceTree = "<group>"; };
+		90EA392E1ADABDC700B059A6 /* FriendsViewInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewInterface.h; sourceTree = "<group>"; };
+		90EA392F1ADAC48200B059A6 /* MessagesVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagesVC.h; sourceTree = "<group>"; };
+		90EA39301ADAC48200B059A6 /* MessagesVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesVC.m; sourceTree = "<group>"; };
 		90EB73B31ACBDBA2009207C4 /* Client_Jabber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client_Jabber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90EB73B71ACBDBA2009207C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90EB73B81ACBDBA2009207C4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1426,6 +1430,8 @@
 		90D648DE1ACBEEB000394DB3 /* Messages */ = {
 			isa = PBXGroup;
 			children = (
+				90EA392F1ADAC48200B059A6 /* MessagesVC.h */,
+				90EA39301ADAC48200B059A6 /* MessagesVC.m */,
 			);
 			name = Messages;
 			sourceTree = "<group>";
@@ -1469,6 +1475,7 @@
 				90D648E51ACBEF3700394DB3 /* Store */,
 				90EB73E21ACBDCFF009207C4 /* FriendsVC.h */,
 				90EB73E31ACBDCFF009207C4 /* FriendsVC.m */,
+				90EA392E1ADABDC700B059A6 /* FriendsViewInterface.h */,
 			);
 			name = Friends;
 			sourceTree = "<group>";
@@ -1773,6 +1780,7 @@
 				905D99BE1ACE8A3700BE4CA5 /* XMPPvCardTempBase.m in Sources */,
 				905D99C81ACE8A3700BE4CA5 /* XMPPIQ+XEP_0066.m in Sources */,
 				905D99E01ACE8A3700BE4CA5 /* XMPPBlocking.m in Sources */,
+				90EA39311ADAC48200B059A6 /* MessagesVC.m in Sources */,
 				905D998E1ACE8A3700BE4CA5 /* XMPPPresence.m in Sources */,
 				905D99941ACE8A3700BE4CA5 /* XMPPOutgoingFileTransfer.m in Sources */,
 				905D99891ACE8A3700BE4CA5 /* XMPPIQ.m in Sources */,

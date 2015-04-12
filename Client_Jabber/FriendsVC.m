@@ -12,16 +12,27 @@
 #import "Friend.h"
 
 #import "AppDelegate.h"
+#import "SessionStore.h"
 
-@interface FriendsVC ()
+#import "FriendsViewInterface.h"
 
-@property (nonatomic, strong)           NSArray     *datas;
+@interface FriendsVC () <FriendsViewInterface>
+
+@property (nonatomic, strong)           NSMutableArray     *datas;
 
 @end
 
 
-
 @implementation FriendsVC
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [SessionStore sharedInstance].friendDelegate = self;
+        self.datas = [NSMutableArray array];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,14 +54,14 @@
 
 #pragma mark - TableView DataSource
 - (void)loadTableViewDatas {
-    [FriendStore getFriendsListOnComplete:^(BOOL success, NSError *error, NSArray *list) {
-        
-        if (success) {
-            self.datas = list;
-            [self.tableView reloadData];
-        }
-        
-    }];
+//    [FriendStore getFriendsListOnComplete:^(BOOL success, NSError *error, NSArray *list) {
+//        
+//        if (success) {
+//            self.datas = list;
+//            [self.tableView reloadData];
+//        }
+//        
+//    }];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -64,14 +75,32 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"FriendCell" forIndexPath:indexPath];
     
-    Friend *friend = self.datas[indexPath.row];
-    cell.textLabel.text = friend.name;
+//    Friend *friend = self.datas[indexPath.row];
+//    cell.textLabel.text = friend.name;
+    cell.textLabel.text = self.datas[indexPath.row];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self navigateToMessagesVC];
+}
+
+#pragma mark - FriendViewInterface
+- (void)buddyWentOffline:(NSString *)buddyName {
+    [_datas removeObject:buddyName];
+    NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_datas count]-1 inSection:0]];
+    [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
+}
+
+- (void)newBuddyOnline:(NSString *)buddyName {
+    [_datas addObject:buddyName];
+    NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_datas count]-1 inSection:0]];
+    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+}
+
+- (void)didDisconnect {
+    
 }
 
 @end

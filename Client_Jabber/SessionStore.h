@@ -8,11 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol FriendsViewInterface;
+
 @interface SessionStore : NSObject
 
 + (instancetype)sharedInstance;
 
 
 - (BOOL)createUsingUserID:(NSString *)userID andPassword:(NSString *)password;
+- (void)destroy;
+
+@property (nonatomic, weak)           id<FriendsViewInterface>            friendDelegate;
 
 @end

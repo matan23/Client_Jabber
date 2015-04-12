@@ -10,6 +10,7 @@
 
 #import "XMPPFramework.h"
 
+#import "FriendsViewInterface.h"
 
 NSString *const kXMPPUserID = @"kXMPPUserID";
 NSString *const kXMPPPassword = @"kXMPPPassword";
@@ -59,7 +60,7 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     _stream = [XMPPStream new];
     _reconnect = [XMPPReconnect new];
     
-    _rosterStorage = [[XMPPRosterCoreDataStorage alloc] initWithInMemoryStore];
+    _rosterStorage = [[XMPPRosterCoreDataStorage alloc] initWithDatabaseFilename:nil storeOptions:nil];
     _roster = [[XMPPRoster alloc] initWithRosterStorage:_rosterStorage];
     _roster.autoFetchRoster = YES;
     _roster.autoAcceptKnownPresenceSubscriptionRequests = YES;
@@ -336,6 +337,10 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
                                                       cancelButtonTitle:@"Ok"
                                                       otherButtonTitles:nil];
             [alertView show];
+            
+            
+            NSDictionary *datas = @{@"sender":displayName, @"content":body};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"didReceiveMessage" object:self userInfo:datas];
         }
         else
         {
@@ -352,6 +357,25 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
     DDLogVerbose(@"%@: %@ - %@", THIS_FILE, THIS_METHOD, [presence fromStr]);
+    
+    
+    NSString *presenceType = [presence type]; // online/offline
+    NSString *myUsername = [[sender myJID] user];
+    NSString *presenceFromUser = [[presence from] user];
+    
+    if (![presenceFromUser isEqualToString:myUsername]) {
+        
+        if ([presenceType isEqualToString:@"available"]) {
+            
+            [self.friendDelegate newBuddyOnline:presenceFromUser];
+            
+        } else if ([presenceType isEqualToString:@"unavailable"]) {
+            
+            [self.friendDelegate buddyWentOffline:presenceFromUser];
+            
+        }
+        
+    }
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveError:(id)error
