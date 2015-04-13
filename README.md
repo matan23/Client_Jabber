@@ -1,0 +1,8 @@
+   - Avoir une fenêtre de connexion.
+   - Avoir une conversation avec un contact.
+   - Gérer différentes conversations actives.
+   - Afficher votre profil.
+   - Modifier votre profil.
+   - Afficher le profil d'un autre utilisateur.
+   - Ajout des contacts.
+   - Supprimer des contacts.

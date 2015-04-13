@@ -8,13 +8,12 @@
 
 #import "FriendsVC.h"
 
-#import "FriendStore.h"
-#import "Friend.h"
-
 #import "AppDelegate.h"
 #import "SessionStore.h"
 
 #import "FriendsViewInterface.h"
+
+#import "MessagesVC.h"
 
 @interface FriendsVC () <FriendsViewInterface>
 
@@ -51,6 +50,20 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Make sure your segue name in storyboard is the same as this line
+    if ([[segue identifier] isEqualToString:@"friendsToMessagesSegue"])
+    {
+        // Get reference to the destination view controller
+        MessagesVC *vc = [segue destinationViewController];
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        
+//        should not hardcore this / either pull from local database or from the session delegate
+        NSString *userID = [NSString stringWithFormat:@"%@@mataejoon.io", _datas[indexPath.row]];
+        vc.userID = userID;
+    }
+}
 
 #pragma mark - TableView DataSource
 - (void)loadTableViewDatas {
@@ -82,21 +95,25 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self navigateToMessagesVC];
-}
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+//    [self navigateToMessagesVC];
+//}
 
 #pragma mark - FriendViewInterface
 - (void)buddyWentOffline:(NSString *)buddyName {
-    [_datas removeObject:buddyName];
-    NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_datas count]-1 inSection:0]];
-    [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
+    if ([_datas containsObject:buddyName]) {
+        [_datas removeObject:buddyName];
+        NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_datas count]-1 inSection:0]];
+        [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
+    }
 }
 
 - (void)newBuddyOnline:(NSString *)buddyName {
-    [_datas addObject:buddyName];
-    NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_datas count]-1 inSection:0]];
-    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+    if (![_datas containsObject:buddyName]) {
+        [_datas addObject:buddyName];
+        NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_datas count]-1 inSection:0]];
+        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+    }
 }
 
 - (void)didDisconnect {

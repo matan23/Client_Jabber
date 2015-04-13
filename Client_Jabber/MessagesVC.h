@@ -10,4 +10,6 @@
 
 @interface MessagesVC : UITableViewController
 
+@property (nonatomic, strong)           NSString            *userID;
+
 @end

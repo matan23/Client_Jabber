@@ -9,8 +9,12 @@
 #import "SessionStore.h"
 
 #import "XMPPFramework.h"
+#import "XMPPMessageArchiving.h"
+#import "XMPPMessageArchivingCoreDataStorage.h"
 
 #import "FriendsViewInterface.h"
+
+#import "AppDelegate.h"
 
 NSString *const kXMPPUserID = @"kXMPPUserID";
 NSString *const kXMPPPassword = @"kXMPPPassword";
@@ -23,6 +27,9 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     
     XMPPRosterCoreDataStorage   *_rosterStorage;
     XMPPRoster          *_roster;
+    
+    XMPPMessageArchiving                        *_messageArchivingModule;
+    XMPPMessageArchivingCoreDataStorage        *_messageArchivingStorage;
     
     BOOL                _isXmppConnected;
     
@@ -64,7 +71,10 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     _roster = [[XMPPRoster alloc] initWithRosterStorage:_rosterStorage];
     _roster.autoFetchRoster = YES;
     _roster.autoAcceptKnownPresenceSubscriptionRequests = YES;
-
+    
+    _messageArchivingStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+    _messageArchivingModule = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:_messageArchivingStorage];
+    [_messageArchivingModule setClientSideMessageArchivingOnly:YES];
     
     [self enableModules:YES];
     [self enableListeners:YES];
@@ -76,6 +86,8 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     if (flag == YES) {
         [_reconnect activate:_stream];
         [_roster activate:_stream];
+        [_messageArchivingModule activate:_stream];    //By this line all your messages are stored in CoreData
+
     } else {
         [_reconnect deactivate];
         [_roster deactivate];
@@ -84,9 +96,11 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
 
 - (void)enableListeners:(BOOL)flag {
     if (flag == YES) {
+        [_messageArchivingModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
         [_stream addDelegate:self delegateQueue:dispatch_get_main_queue()];
         [_roster addDelegate:self delegateQueue:dispatch_get_main_queue()];
     } else {
+        [_messageArchivingModule removeDelegate:self];
         [_stream removeDelegate:self];
         [_roster removeDelegate:self];
     }
@@ -366,7 +380,6 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     if (![presenceFromUser isEqualToString:myUsername]) {
         
         if ([presenceType isEqualToString:@"available"]) {
-            
             [self.friendDelegate newBuddyOnline:presenceFromUser];
             
         } else if ([presenceType isEqualToString:@"unavailable"]) {

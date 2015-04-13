@@ -93,7 +93,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="spP-tT-0sL" kind="push" identifier="friendsToMessagesSegue" trigger="accessoryAction" id="RjX-Wb-S0x"/>
+                                    <segue destination="spP-tT-0sL" kind="show" identifier="friendsToMessagesSegue" id="00P-Td-Yyq"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -172,7 +172,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zTu-cD-3hY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2084" y="1266"/>
+            <point key="canvasLocation" x="2883" y="354"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="pRB-Is-wD0">
@@ -234,6 +234,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="RjX-Wb-S0x"/>
+        <segue reference="00P-Td-Yyq"/>
     </inferredMetricsTieBreakers>
 </document>
