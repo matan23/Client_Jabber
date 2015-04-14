@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+@class XMPPPresence;
+
 @protocol FriendsViewInterface <NSObject>
 
+- (void)newBuddyRequest:(XMPPPresence *)buddyName;
 - (void)newBuddyOnline:(NSString *)buddyName;
 - (void)buddyWentOffline:(NSString *)buddyName;
 - (void)didDisconnect;

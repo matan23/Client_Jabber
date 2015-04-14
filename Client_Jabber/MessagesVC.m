@@ -73,8 +73,12 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MessageCell" forIndexPath:indexPath];
     
     XMPPMessageArchiving_Message_CoreDataObject *message = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    cell.textLabel.text = message.body;
-    cell.detailTextLabel.text = message.bareJidStr;
+    if ([message.composing isEqualToNumber:@1])
+        cell.textLabel.text = @"...";
+    else {
+        cell.textLabel.text = message.body;
+        cell.detailTextLabel.text = message.bareJidStr;
+    }
     
     return cell;
 }
@@ -87,6 +91,8 @@
     
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"XMPPMessageArchiving_Message_CoreDataObject"];
     request.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bareJidStr == %@", self.userID];
+    [request setPredicate:predicate];
     
     XMPPMessageArchivingCoreDataStorage *storage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
     _fetchedRC = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[storage mainThreadManagedObjectContext]  sectionNameKeyPath:nil cacheName:@"MessagesContactListCache"];
@@ -106,9 +112,16 @@
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    
     switch (type) {
         case NSFetchedResultsChangeInsert:
             [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
+            break;
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
             break;
         default:
             break;

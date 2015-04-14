@@ -386,11 +386,11 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
             
             [self.friendDelegate buddyWentOffline:presenceFromUser];
             
+        } else if ([presenceType isEqualToString:@"subscribe"]) {
+            [self.friendDelegate newBuddyRequest:[presence copy]];
         }
-        
     }
 }
-
 - (void)xmppStream:(XMPPStream *)sender didReceiveError:(id)error
 {
     DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
@@ -407,49 +407,57 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
 }
 
 
-//#pragma mark XMPPRosterDelegate
-//
-//- (void)xmppRoster:(XMPPRoster *)sender didReceiveBuddyRequest:(XMPPPresence *)presence
-//{
-//    DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
-//    
-//    XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[presence from]
-//                                                             xmppStream:_stream
-//                                                   managedObjectContext:[self managedObjectContext_roster]];
-//    
-//    NSString *displayName = [user displayName];
-//    NSString *jidStrBare = [presence fromStr];
-//    NSString *body = nil;
-//    
-//    if (![displayName isEqualToString:jidStrBare])
-//    {
-//        body = [NSString stringWithFormat:@"Buddy request from %@ <%@>", displayName, jidStrBare];
-//    }
-//    else
-//    {
-//        body = [NSString stringWithFormat:@"Buddy request from %@", displayName];
-//    }
-//    
-//    
-//    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-//    {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
-//                                                            message:body
-//                                                           delegate:nil
-//                                                  cancelButtonTitle:@"Not implemented"
-//                                                  otherButtonTitles:nil];
-//        [alertView show];
-//    }
-//    else
-//    {
-//        // We are not active, so use a local notification instead
-//        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-//        localNotification.alertAction = @"Not implemented";
-//        localNotification.alertBody = body;
-//        
-//        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-//    }
-//    
-//}
+#pragma mark XMPPRosterDelegate
+
+- (void)xmppRoster:(XMPPRoster *)sender didReceiveBuddyRequest:(XMPPPresence *)presence
+{
+    DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+    
+    XMPPUserCoreDataStorageObject *user = [_rosterStorage userForJID:[presence from]
+                                                             xmppStream:_stream
+                                                   managedObjectContext:[self managedObjectContext_roster]];
+    
+    NSString *displayName = [user displayName];
+    NSString *jidStrBare = [presence fromStr];
+    NSString *body = nil;
+    
+    if (![displayName isEqualToString:jidStrBare])
+    {
+        body = [NSString stringWithFormat:@"Buddy request from %@ <%@>", displayName, jidStrBare];
+    }
+    else
+    {
+        body = [NSString stringWithFormat:@"Buddy request from %@", displayName];
+    }
+    
+    
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
+                                                            message:body
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Not implemented"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+    }
+    else
+    {
+        // We are not active, so use a local notification instead
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+        localNotification.alertAction = @"Not implemented";
+        localNotification.alertBody = body;
+        
+        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+    }
+    
+}
+
+- (void)acceptBuddyRequest:(XMPPPresence *)presence {
+    [_roster acceptPresenceSubscriptionRequestFrom:[presence from] andAddToRoster:YES];
+}
+
+- (void)rejectBuddyRequest:(XMPPPresence *)presence {
+    [_roster rejectPresenceSubscriptionRequestFrom:[presence from]];
+}
 
 @end

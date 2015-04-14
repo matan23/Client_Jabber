@@ -8,12 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+@class XMPPPresence;
+
 @protocol FriendsViewInterface;
 
 @interface SessionStore : NSObject
 
 + (instancetype)sharedInstance;
 
+
+- (void)acceptBuddyRequest:(XMPPPresence *)buddyID;
+- (void)rejectBuddyRequest:(XMPPPresence *)buddyID;
 
 - (BOOL)createUsingUserID:(NSString *)userID andPassword:(NSString *)password;
 - (void)destroy;

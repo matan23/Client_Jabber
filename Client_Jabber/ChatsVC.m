@@ -61,7 +61,7 @@
 - (NSFetchedResultsController *)fetchedResultsController {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"XMPPMessageArchiving_Message_CoreDataObject"];
     request.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES]];
-    
+        
     XMPPMessageArchivingCoreDataStorage *storage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
     NSFetchedResultsController *FRC = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[storage mainThreadManagedObjectContext]  sectionNameKeyPath:nil cacheName:nil];
 

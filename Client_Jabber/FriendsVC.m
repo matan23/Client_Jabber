@@ -15,9 +15,12 @@
 
 #import "MessagesVC.h"
 
-@interface FriendsVC () <FriendsViewInterface>
+#import "XMPPPresence.h"
 
-@property (nonatomic, strong)           NSMutableArray     *datas;
+@interface FriendsVC () <FriendsViewInterface, UIAlertViewDelegate>
+
+@property (nonatomic, strong)           NSMutableArray          *datas;
+@property (nonatomic, strong)           XMPPPresence            *presence;
 
 @end
 
@@ -113,6 +116,21 @@
         [_datas addObject:buddyName];
         NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_datas count]-1 inSection:0]];
         [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+    }
+}
+
+- (void)newBuddyRequest:(XMPPPresence *)presence {
+    self.presence = presence;
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New request From:" message:[[presence from] user] delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
+    [alert show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [[SessionStore sharedInstance] rejectBuddyRequest:self.presence];
+    } else {
+        [[SessionStore sharedInstance] acceptBuddyRequest:self.presence];
     }
 }
 
