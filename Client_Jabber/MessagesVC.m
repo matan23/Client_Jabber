@@ -60,22 +60,16 @@
                                              selector:@selector(keyboardWillChange:)
                                                  name:UIKeyboardWillChangeFrameNotification
                                                object:nil];
-    
 }
 
-//- (void)viewDidAppear:(BOOL)animated {
-//    [super viewDidAppear:animated];
-//    
-//    NSDictionary *views =
-//    @{
-//      @"superView": self.keyboardBar
-//      };
-//    
-//    [self.keyboardBar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-6-[superView]-6-|" options:0 metrics:nil views:views]];
-//    [self.keyboardBar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-6-[superView]-6-|" options:0 metrics:nil views:views]];
-//    [self reloadInputViews];
-//
-//}
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    NSInteger nbRows = [self.tableView numberOfRowsInSection:0];
+    NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:nbRows -1 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
+}
 
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -252,7 +246,8 @@
     
     switch (type) {
         case NSFetchedResultsChangeInsert:
-            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
+//            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
+            [self insertRowAndScrollToIndexPath:newIndexPath];
             break;
         case NSFetchedResultsChangeUpdate:
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
@@ -263,5 +258,20 @@
         default:
             break;
     }
+}
+
+- (void)insertRowAndScrollToIndexPath:(NSIndexPath *)newIndexPath {
+    [CATransaction begin];
+    
+    
+    [CATransaction setCompletionBlock: ^{
+        [self.tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        
+    }];
+    [self.tableView beginUpdates];
+    [self.tableView insertRowsAtIndexPaths:@[newIndexPath]
+                          withRowAnimation: UITableViewRowAnimationAutomatic];
+    [self.tableView endUpdates];
+    [CATransaction commit];
 }
 @end
