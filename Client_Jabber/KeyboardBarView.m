@@ -34,6 +34,7 @@
         self.textField.backgroundColor = [UIColor whiteColor];
         self.textField.layer.masksToBounds = true;
         self.textField.layer.cornerRadius = 6.0f;
+        self.textField.placeholder = @"Bla bla..";
         [self addSubview:self.textField];
     }
     return self;

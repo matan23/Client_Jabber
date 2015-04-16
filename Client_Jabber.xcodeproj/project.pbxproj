@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		90155B7F1ADEBF690058A649 /* KeyboardBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90155B7E1ADEBF690058A649 /* KeyboardBarView.m */; };
+		901C60671AE06C94005F5FFF /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 901C60661AE06C94005F5FFF /* NSString+Additions.m */; };
 		905D997B1ACE8A3700BE4CA5 /* XMPPAnonymousAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 905D98081ACE8A3700BE4CA5 /* XMPPAnonymousAuthentication.m */; };
 		905D997C1ACE8A3700BE4CA5 /* XMPPDeprecatedDigestAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 905D980B1ACE8A3700BE4CA5 /* XMPPDeprecatedDigestAuthentication.m */; };
 		905D997D1ACE8A3700BE4CA5 /* XMPPDeprecatedPlainAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 905D980E1ACE8A3700BE4CA5 /* XMPPDeprecatedPlainAuthentication.m */; };
@@ -185,6 +186,9 @@
 /* Begin PBXFileReference section */
 		90155B7D1ADEBF690058A649 /* KeyboardBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardBarView.h; sourceTree = "<group>"; };
 		90155B7E1ADEBF690058A649 /* KeyboardBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardBarView.m; sourceTree = "<group>"; };
+		901C60651AE06C94005F5FFF /* NSString+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Additions.h"; sourceTree = "<group>"; };
+		901C60661AE06C94005F5FFF /* NSString+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Additions.m"; sourceTree = "<group>"; };
+		901C60681AE07051005F5FFF /* LoginViewInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewInterface.h; sourceTree = "<group>"; };
 		905D98071ACE8A3700BE4CA5 /* XMPPAnonymousAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPAnonymousAuthentication.h; sourceTree = "<group>"; };
 		905D98081ACE8A3700BE4CA5 /* XMPPAnonymousAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPAnonymousAuthentication.m; sourceTree = "<group>"; };
 		905D980A1ACE8A3700BE4CA5 /* XMPPDeprecatedDigestAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPDeprecatedDigestAuthentication.h; sourceTree = "<group>"; };
@@ -1449,6 +1453,8 @@
 				90D648E11ACBEEC300394DB3 /* Chats */,
 				90D648E01ACBEEB100394DB3 /* Settings */,
 				90D648DE1ACBEEB000394DB3 /* Messages */,
+				901C60651AE06C94005F5FFF /* NSString+Additions.h */,
+				901C60661AE06C94005F5FFF /* NSString+Additions.m */,
 			);
 			name = Module;
 			sourceTree = "<group>";
@@ -1491,6 +1497,7 @@
 				90D648E41ACBEF3000394DB3 /* Store */,
 				90EB73C01ACBDBA2009207C4 /* LoginVC.h */,
 				90EB73C11ACBDBA2009207C4 /* LoginVC.m */,
+				901C60681AE07051005F5FFF /* LoginViewInterface.h */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -1764,6 +1771,7 @@
 				905D99FA1ACE8A3700BE4CA5 /* GCDAsyncSocket.m in Sources */,
 				905D99E51ACE8A3700BE4CA5 /* XMPPPing.m in Sources */,
 				905D99F51ACE8A3700BE4CA5 /* RFImageToDataTransformer.m in Sources */,
+				901C60671AE06C94005F5FFF /* NSString+Additions.m in Sources */,
 				905D99951ACE8A3700BE4CA5 /* XMPPGoogleSharedStatus.m in Sources */,
 				905D99D21ACE8A3700BE4CA5 /* XMPPCapabilitiesCoreDataStorage.m in Sources */,
 				905D99A41ACE8A3700BE4CA5 /* XMPPJabberRPCModule.m in Sources */,

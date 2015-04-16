@@ -13,6 +13,7 @@
 #import "XMPPMessageArchivingCoreDataStorage.h"
 
 #import "FriendsViewInterface.h"
+#import "LoginViewInterface.h"
 
 #import "AppDelegate.h"
 
@@ -91,6 +92,7 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     } else {
         [_reconnect deactivate];
         [_roster deactivate];
+        [_messageArchivingModule deactivate];
     }
 }
 
@@ -164,11 +166,16 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
 #pragma mark - Public API
 
 - (BOOL)createUsingUserID:(NSString *)userID andPassword:(NSString *)password {
-    if (![_stream isDisconnected]) {
+    if (_stream && ![_stream isDisconnected]) {
         return YES;
     }
+    else if (!_stream) {
+        [self setupStream];
+    }
 
-    if (userID == nil || password == nil) {
+    if ([userID isBlank] || [password isBlank]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure" message:@"Please check login or password" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
         return NO;
     }
     
@@ -178,13 +185,15 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     NSError *error = nil;
     if (![_stream connectWithTimeout:XMPPStreamTimeoutNone error:&error])
     {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error connecting"
-                                                            message:@"See console for error details."
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil];
-        [alertView show];
-        DDLogError(@"Error connecting: %@", error);
+        if (error) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error connecting"
+                                                                message:[error description]
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Ok"
+                                                      otherButtonTitles:nil];
+            [alertView show];
+            DDLogError(@"Error connecting: %@", error);
+        }
         return NO;
     }
     return YES;
@@ -193,7 +202,7 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
 
 - (void)destroy {
     [self goOffline];
-    [_stream disconnect];
+    [self tearDownStream];
 }
 
 - (void)sendMessage:(NSString *)message to:(NSString *)user
@@ -316,6 +325,8 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     
     _isXmppConnected = YES;
     
+    NSLog(@"XMP CONNECTED");
+    
     NSError *error = nil;
     
     if (![_stream authenticateWithPassword:_password error:&error])
@@ -328,16 +339,27 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
 {
     DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
     
+    NSLog(@"DID AUTHENTICATE");
+    
+    [self.loginDelegate userDidAuthenticate:sender];
+    
     [self goOnline];
 }
 
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error
 {
+    NSLog(@"DID NOT AUTHENTICATE");
+    
+    [self destroy];
+    
+    [self.loginDelegate userDidNotAuthenticate];
+    
     DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
 }
 
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
 {
+    NSLog(@"DID RECEIVE IQ");
     DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
     
     return NO;
@@ -402,9 +424,20 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
         }
     }
 }
+
 - (void)xmppStream:(XMPPStream *)sender didReceiveError:(id)error
 {
     DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+    [self destroy];
+    
+    NSString *errorStr = (NSString *)[error description];
+    if ([errorStr rangeOfString:@"host-unkown"].location == NSNotFound) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure" message:@"Unknown server" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure" message:@"Please contact customer support 06.." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error

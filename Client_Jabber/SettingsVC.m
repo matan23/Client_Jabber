@@ -8,7 +8,15 @@
 
 #import "SettingsVC.h"
 
+#import "AppDelegate.h"
+
+#import "SessionStore.h"
+
 @interface SettingsVC ()
+
+@property (weak, nonatomic) IBOutlet UITextField *userNameTF;
+@property (weak, nonatomic) IBOutlet UITextField *domainTF;
+@property (weak, nonatomic) IBOutlet UITextField *hostNameTF;
 
 @end
 
@@ -17,11 +25,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    NSString *userName = [[NSUserDefaults standardUserDefaults] stringForKey:@"userid"];
+    NSString *domain = [[NSUserDefaults standardUserDefaults] stringForKey:@"domain"];
+    NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:@"hostname"];
+    self.userNameTF.text = userName;
+    self.domainTF.text = domain;
+    self.hostNameTF.text = hostName;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (IBAction)logOutBtnPressed:(id)sender {
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    delegate.window.rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"loginVC"];
+    [[SessionStore sharedInstance] destroy];
 }
 
 /*

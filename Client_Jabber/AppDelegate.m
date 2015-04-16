@@ -30,8 +30,16 @@
         byPassLoginView = YES;
     }
     
+    NSString *jid = [[NSUserDefaults standardUserDefaults] stringForKey:@"jid"];
+    NSString *pwd = [[NSUserDefaults standardUserDefaults] stringForKey:@"pwd"];
+    
+    
     if (byPassLoginView) {
+        [[SessionStore sharedInstance] createUsingUserID:@"matan@mataejoon.io" andPassword:@"qwe123"];
         rootVcName = @"homeVC";
+    } else if (jid && ![jid isBlank] && pwd && ![pwd isBlank]) {
+        rootVcName = @"homeVC";
+        [[SessionStore sharedInstance] createUsingUserID:jid andPassword:pwd];
     } else {
         rootVcName = @"loginVC";
     }
@@ -63,7 +71,11 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    [[SessionStore sharedInstance] createUsingUserID:@"matan@mataejoon.io" andPassword:@"qwe123"];
+    NSString *jid = [[NSUserDefaults standardUserDefaults] stringForKey:@"jid"];
+    NSString *pwd = [[NSUserDefaults standardUserDefaults] stringForKey:@"pwd"];
+    
+    if (jid && ![jid isBlank] && pwd && ![pwd isBlank])
+        [[SessionStore sharedInstance] createUsingUserID:jid andPassword:pwd];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

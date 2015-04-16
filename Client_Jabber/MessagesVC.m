@@ -66,9 +66,10 @@
     [super viewDidAppear:animated];
     
     NSInteger nbRows = [self.tableView numberOfRowsInSection:0];
-    NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:nbRows -1 inSection:0];
-    [self.tableView scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    
+    if (nbRows > 0) {
+        NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:nbRows -1 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:lastIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated

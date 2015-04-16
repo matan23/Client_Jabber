@@ -12,7 +12,11 @@
 
 #import "SessionStore.h"
 
-@interface LoginVC ()
+#import "LoginViewInterface.h"
+
+#import "XMPPStream.h"
+
+@interface LoginVC () <LoginViewInterface>
 
 @property (weak, nonatomic) IBOutlet UITextField *loginTF;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTF;
@@ -48,23 +52,33 @@
 
 #pragma mark - Helpers To Be Moved?
 - (void)connectUsingUser:(NSString *)user andPassword:(NSString *)password {
-    
-    
-    if ([[SessionStore sharedInstance] createUsingUserID:user andPassword:password]) {
-        [self connectionSuccess];
-    } else {
-        [self connectionFailure];
-    }
+    [[SessionStore sharedInstance] createUsingUserID:user andPassword:password];
+    [SessionStore sharedInstance].loginDelegate = self;
 }
 
-- (void)connectionSuccess {
-    NSLog(@"connection succeeded!");
+#pragma mark - LoginViewInterface
+- (void)userDidAuthenticate:(XMPPStream *)sender {
+    [self persistLogin:sender];
     [self navigateToHomeVC];
 }
 
-- (void)connectionFailure {
-    NSLog(@"failed to connect");
+- (void)persistLogin:(XMPPStream *)sender {
+    NSArray *strings = [self.loginTF.text componentsSeparatedByString:@"@"];
+    NSString *userID = [strings firstObject];
+    NSString *domain = [strings objectAtIndex:1];
+    NSString *pwd = self.passwordTF.text;
+    
+    [[NSUserDefaults standardUserDefaults] setValue:self.loginTF.text forKey:@"jid"];
+    [[NSUserDefaults standardUserDefaults] setValue:sender.hostName forKey:@"hostname"];
+    [[NSUserDefaults standardUserDefaults] setValue:userID forKey:@"userid"];
+    [[NSUserDefaults standardUserDefaults] setValue:domain forKey:@"domain"];
+    [[NSUserDefaults standardUserDefaults] setValue:self.passwordTF.text forKey:@"pwd"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void)userDidNotAuthenticate {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure" message:@"Please check login or password" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
+}
 
 @end

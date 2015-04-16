@@ -136,9 +136,10 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
-        [[SessionStore sharedInstance] rejectBuddyRequest:self.presence];
-    } else {
         [[SessionStore sharedInstance] acceptBuddyRequest:self.presence];
+    } else {
+        [[SessionStore sharedInstance] rejectBuddyRequest:self.presence];
+        
     }
 }
 

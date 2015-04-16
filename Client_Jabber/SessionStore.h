@@ -11,6 +11,7 @@
 @class XMPPPresence;
 
 @protocol FriendsViewInterface;
+@protocol LoginViewInterface;
 
 @interface SessionStore : NSObject
 
@@ -26,5 +27,6 @@
 - (void)destroy;
 
 @property (nonatomic, weak)           id<FriendsViewInterface>            friendDelegate;
+@property (nonatomic, weak)           id<LoginViewInterface>                loginDelegate;
 
 @end
