@@ -98,24 +98,32 @@
     return cell;
 }
 
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    [self navigateToMessagesVC];
-//}
-
 #pragma mark - FriendViewInterface
 - (void)buddyWentOffline:(NSString *)buddyName {
     if ([_datas containsObject:buddyName]) {
+        
+        NSInteger row = [_datas indexOfObject:buddyName];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+        
         [_datas removeObject:buddyName];
-        NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_datas count]-1 inSection:0]];
-        [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
+        
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+        
+        
     }
 }
 
 - (void)newBuddyOnline:(NSString *)buddyName {
     if (![_datas containsObject:buddyName]) {
+        
+        NSInteger row = [_datas count];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+        
         [_datas addObject:buddyName];
-        NSArray *paths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_datas count]-1 inSection:0]];
-        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+        
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+        
+        
     }
 }
 
