@@ -196,7 +196,22 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     [_stream disconnect];
 }
 
-
+- (void)sendMessage:(NSString *)message to:(NSString *)user
+{
+    NSString *messageStr = message;
+    
+    if ([messageStr length] > 0)
+    {
+        NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+        [body setStringValue:messageStr];
+        NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
+        [message addAttributeWithName:@"type" stringValue:@"chat"];
+        [message addAttributeWithName:@"to" stringValue:user];
+        [message addChild:body];
+        
+        [_stream sendElement:message];
+    }    
+}
 
 
 #pragma mark Core Data
@@ -351,10 +366,6 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
                                                       cancelButtonTitle:@"Ok"
                                                       otherButtonTitles:nil];
             [alertView show];
-            
-            
-            NSDictionary *datas = @{@"sender":displayName, @"content":body};
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"didReceiveMessage" object:self userInfo:datas];
         }
         else
         {

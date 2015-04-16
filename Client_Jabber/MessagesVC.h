@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MessagesVC : UITableViewController
+@interface MessagesVC : UIViewController
 
 @property (nonatomic, strong)           NSString            *userID;
 

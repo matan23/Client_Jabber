@@ -20,6 +20,8 @@
 - (void)acceptBuddyRequest:(XMPPPresence *)buddyID;
 - (void)rejectBuddyRequest:(XMPPPresence *)buddyID;
 
+- (void)sendMessage:(NSString *)message to:(NSString *)user;
+
 - (BOOL)createUsingUserID:(NSString *)userID andPassword:(NSString *)password;
 - (void)destroy;
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		90155B7F1ADEBF690058A649 /* KeyboardBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90155B7E1ADEBF690058A649 /* KeyboardBarView.m */; };
 		905D997B1ACE8A3700BE4CA5 /* XMPPAnonymousAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 905D98081ACE8A3700BE4CA5 /* XMPPAnonymousAuthentication.m */; };
 		905D997C1ACE8A3700BE4CA5 /* XMPPDeprecatedDigestAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 905D980B1ACE8A3700BE4CA5 /* XMPPDeprecatedDigestAuthentication.m */; };
 		905D997D1ACE8A3700BE4CA5 /* XMPPDeprecatedPlainAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 905D980E1ACE8A3700BE4CA5 /* XMPPDeprecatedPlainAuthentication.m */; };
@@ -182,6 +183,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		90155B7D1ADEBF690058A649 /* KeyboardBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardBarView.h; sourceTree = "<group>"; };
+		90155B7E1ADEBF690058A649 /* KeyboardBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardBarView.m; sourceTree = "<group>"; };
 		905D98071ACE8A3700BE4CA5 /* XMPPAnonymousAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPAnonymousAuthentication.h; sourceTree = "<group>"; };
 		905D98081ACE8A3700BE4CA5 /* XMPPAnonymousAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPAnonymousAuthentication.m; sourceTree = "<group>"; };
 		905D980A1ACE8A3700BE4CA5 /* XMPPDeprecatedDigestAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPDeprecatedDigestAuthentication.h; sourceTree = "<group>"; };
@@ -1432,6 +1435,8 @@
 			children = (
 				90EA392F1ADAC48200B059A6 /* MessagesVC.h */,
 				90EA39301ADAC48200B059A6 /* MessagesVC.m */,
+				90155B7D1ADEBF690058A649 /* KeyboardBarView.h */,
+				90155B7E1ADEBF690058A649 /* KeyboardBarView.m */,
 			);
 			name = Messages;
 			sourceTree = "<group>";
@@ -1766,6 +1771,7 @@
 				905D99DC1ACE8A3700BE4CA5 /* XMPPMessage+XEP_0172.m in Sources */,
 				90EB73E11ACBDCF1009207C4 /* SettingsVC.m in Sources */,
 				905D99ED1ACE8A3700BE4CA5 /* XMPPMessageCarbons.m in Sources */,
+				90155B7F1ADEBF690058A649 /* KeyboardBarView.m in Sources */,
 				905D99AF1ACE8A3700BE4CA5 /* XMPPRoomOccupantHybridMemoryStorageObject.m in Sources */,
 				905D99DD1ACE8A3700BE4CA5 /* XMPPPresence+XEP_0172.m in Sources */,
 				905D99A11ACE8A3700BE4CA5 /* XMPPSystemInputActivityMonitor.m in Sources */,

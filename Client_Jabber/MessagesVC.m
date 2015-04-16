@@ -7,16 +7,34 @@
 //
 
 #import "MessagesVC.h"
+#import "KeyboardBarView.h"
 
 #import "XMPPMessageArchivingCoreDataStorage.h"
 
-@interface MessagesVC () <NSFetchedResultsControllerDelegate> {
+#import "SessionStore.h"
+
+@interface MessagesVC () <NSFetchedResultsControllerDelegate, UITextFieldDelegate> {
     NSFetchedResultsController *_fetchedRC;
 }
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) KeyboardBarView *keyboardBar;
 
 @end
 
 @implementation MessagesVC
+
+- (void)loadView {
+    [super loadView];
+    
+    self.tableView.allowsSelection = false;
+    [self.view becomeFirstResponder];
+    
+    // Add a TapGestureRecognizer to dismiss the keyboard when the view is tapped
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyboard)];
+    [self.view addGestureRecognizer:recognizer];
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,11 +50,122 @@
         NSLog(@"error: %@", [error description]);
     }
     [self fetchedResultsController].delegate = self;
+    [self.view becomeFirstResponder];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillChange:)
+                                                 name:UIKeyboardWillChangeFrameNotification
+                                               object:nil];
+    
+}
+
+//- (void)viewDidAppear:(BOOL)animated {
+//    [super viewDidAppear:animated];
+//    
+//    NSDictionary *views =
+//    @{
+//      @"superView": self.keyboardBar
+//      };
+//    
+//    [self.keyboardBar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-6-[superView]-6-|" options:0 metrics:nil views:views]];
+//    [self.keyboardBar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-6-[superView]-6-|" options:0 metrics:nil views:views]];
+//    [self reloadInputViews];
+//
+//}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+}
+
+
+#pragma mark - TextFieldDelegate
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self.keyboardBar resignFirstResponder];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (![textField.text isEqualToString:@""]) {
+        [textField resignFirstResponder];
+        
+        [[SessionStore sharedInstance] sendMessage:textField.text to:self.userID];
+        
+        textField.text = @"";
+    }
+    return NO;
+}
+
+#pragma mark - Keyboard management
+- (UIView*)inputAccessoryView
+{
+    if (self.keyboardBar == nil) {
+        self.keyboardBar = [[KeyboardBarView alloc] initWithDelegate:self];
+    }
+    
+    return self.keyboardBar;
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (void)hideKeyboard
+{
+    [self.keyboardBar dismissKeyboard];
+}
+
+
+-(void)keyboardWillChange:(NSNotification *)notification
+{
+    // Retrieve the keyboard begin / end frame values
+    CGRect beginFrame = [[notification.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect endFrame =  [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat delta = (endFrame.origin.y - beginFrame.origin.y);
+    NSLog(@"Keyboard YDelta %f -> B: %@, E: %@", delta, NSStringFromCGRect(beginFrame), NSStringFromCGRect(endFrame));
+    
+    // Lets only maintain the scroll position if we are already scrolled at the bottom
+    // or if there is a change to the keyboard position
+    if([self scrolledToBottom] && fabs(delta) > 0.0) {
+        
+        // Construct the animation details
+        NSTimeInterval duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+        UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
+        UIViewAnimationOptions options = (curve << 16) | UIViewAnimationOptionBeginFromCurrentState;
+        
+        [UIView animateWithDuration:duration delay:0 options:options animations:^{
+            
+            // Make the tableview scroll opposite the change in keyboard offset.
+            // This causes the scroll position to match the change in table size 1 for 1
+            // since the animation is the same as the keyboard expansion
+            self.tableView.contentOffset = CGPointMake(0, self.tableView.contentOffset.y - delta);
+            
+        } completion:nil];
+    }
+}
+
+// Returns true if the table is currently scrolled to the bottom
+- (bool) scrolledToBottom
+{
+    return self.tableView.contentOffset.y >= (self.tableView.contentSize.height - self.tableView.bounds.size.height);
+}
+
+
+// Scrolls the UITableView to the bottom of the last row
+- (void)scrollToBottom:(BOOL)animated
+{
+    NSInteger lastSection = [self.tableView.dataSource numberOfSectionsInTableView:self.tableView] - 1;
+    NSInteger rowIndex = [self.tableView.dataSource tableView:self.tableView numberOfRowsInSection:lastSection] - 1;
+    
+    if(rowIndex >= 0) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:lastSection];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+    }
 }
 
 #pragma mark - Table view data source
@@ -70,14 +199,22 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MessageCell" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MessageCell"];
+    
+    if (cell == nil) {
+      cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MessageCell"];
+    }
     
     XMPPMessageArchiving_Message_CoreDataObject *message = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     if ([message.composing isEqualToNumber:@1])
         cell.textLabel.text = @"...";
     else {
         cell.textLabel.text = message.body;
-        cell.detailTextLabel.text = message.bareJidStr;
+        if ([message.outgoing isEqualToNumber:@0]) {
+            cell.detailTextLabel.text = message.bareJidStr;
+        } else {
+            cell.detailTextLabel.text = @"";
+        }
     }
     
     return cell;
