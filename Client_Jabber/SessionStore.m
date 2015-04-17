@@ -380,7 +380,7 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
         NSString *body = [[message elementForName:@"body"] stringValue];
         NSString *displayName = [user displayName];
         
-        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+        if (self.chatDelegate == nil && [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
         {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
                                                                 message:body
@@ -390,6 +390,7 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
             [alertView show];
         }
         else
+//        if (self.chatDelegate == nil || [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
         {
             // We are not active, so use a local notification instead
             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
@@ -486,7 +487,7 @@ NSString *const kXMPPPassword = @"kXMPPPassword";
     }
     else
     {
-        // We are not active, so use a local notification instead
+//         We are not active, so use a local notification instead
         UILocalNotification *localNotification = [[UILocalNotification alloc] init];
         localNotification.alertAction = @"Not implemented";
         localNotification.alertBody = body;

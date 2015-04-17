@@ -13,6 +13,10 @@
 @protocol FriendsViewInterface;
 @protocol LoginViewInterface;
 
+@protocol ChatViewInterface
+
+@end
+
 @interface SessionStore : NSObject
 
 + (instancetype)sharedInstance;
@@ -28,5 +32,6 @@
 
 @property (nonatomic, weak)           id<FriendsViewInterface>            friendDelegate;
 @property (nonatomic, weak)           id<LoginViewInterface>                loginDelegate;
+@property (nonatomic, weak)           id<ChatViewInterface>                chatDelegate;
 
 @end

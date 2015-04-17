@@ -45,6 +45,10 @@
     }
     
 //    [[SessionStore sharedInstance] createUsingUserID:@"matan@mataejoon.io" andPassword:@"qwe123"];
+    
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
+    }
 
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -57,7 +61,7 @@
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-    [[SessionStore sharedInstance] destroy];
+
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -81,6 +85,8 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
+//    [[SessionStore sharedInstance] destroy];
+    [[SessionStore sharedInstance] destroy];
     [self saveContext];
 }
 

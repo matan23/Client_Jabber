@@ -10,6 +10,8 @@
 
 #import "XMPPMessageArchivingCoreDataStorage.h"
 
+#import "SessionStore.h"
+
 @interface ChatsVC () <NSFetchedResultsControllerDelegate> {
     NSMutableArray  *_messages;
 }

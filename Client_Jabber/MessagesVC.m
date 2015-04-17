@@ -13,7 +13,7 @@
 
 #import "SessionStore.h"
 
-@interface MessagesVC () <NSFetchedResultsControllerDelegate, UITextFieldDelegate> {
+@interface MessagesVC () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, ChatViewInterface> {
     NSFetchedResultsController *_fetchedRC;
 }
 
@@ -33,7 +33,9 @@
     // Add a TapGestureRecognizer to dismiss the keyboard when the view is tapped
     UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyboard)];
     [self.view addGestureRecognizer:recognizer];
+    [SessionStore sharedInstance].chatDelegate = self;
 }
+
 
 
 - (void)viewDidLoad {
@@ -79,6 +81,11 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [SessionStore sharedInstance].chatDelegate = nil;
+}
 
 #pragma mark - TextFieldDelegate
 - (void)textFieldDidEndEditing:(UITextField *)textField {

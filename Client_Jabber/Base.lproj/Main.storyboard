@@ -33,8 +33,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
                             </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dSU-Ge-eDe">
+                                <rect key="frame" x="149" y="28" width="76" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tVR-uw-Z3y">
-                                <rect key="frame" x="16" y="617" width="343" height="30"/>
+                                <rect key="frame" x="16" y="223" width="343" height="30"/>
                                 <color key="backgroundColor" red="0.20195043087005615" green="0.5938105583190918" blue="0.024617195129394531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="viJ-Bj-Jqi"/>
@@ -47,12 +53,6 @@
                                     <action selector="loginBtnTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="IEQ-2S-hfZ"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dSU-Ge-eDe">
-                                <rect key="frame" x="149" y="28" width="76" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -66,7 +66,7 @@
                             <constraint firstItem="old-xl-QNP" firstAttribute="top" secondItem="dSU-Ge-eDe" secondAttribute="bottom" constant="91" id="cTt-SJ-Qyl"/>
                             <constraint firstItem="I6g-bs-ZGy" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="hpn-nm-KqF"/>
                             <constraint firstItem="old-xl-QNP" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="ptd-GQ-YPW"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="tVR-uw-Z3y" secondAttribute="bottom" constant="20" id="r10-EW-or6"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="tVR-uw-Z3y" secondAttribute="bottom" constant="414" id="r10-EW-or6"/>
                             <constraint firstItem="tVR-uw-Z3y" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="zIh-bg-njQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dSU-Ge-eDe" secondAttribute="trailing" constant="134" id="zRw-uR-BKL"/>
                         </constraints>

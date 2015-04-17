@@ -63,7 +63,11 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         
 //        should not hardcore this / either pull from local database or from the session delegate
-        NSString *userID = [NSString stringWithFormat:@"%@@mataejoon.io", _datas[indexPath.row]];
+        NSString *domain = [[NSUserDefaults standardUserDefaults] stringForKey:@"domain"];
+        
+        if (!domain || ![domain isBlank])
+            domain = @"mataejoon.io";
+        NSString *userID = [NSString stringWithFormat:@"%@@%@", _datas[indexPath.row], domain];
         vc.userID = userID;
     }
 }
@@ -129,7 +133,8 @@
 
 - (void)newBuddyRequest:(XMPPPresence *)presence {
     self.presence = presence;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New request From:" message:[[presence from] user] delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
+    NSString *msg = [NSString stringWithFormat:@"%@ wants to be your friend on iJabber", [[presence from] user]];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Friend Request:" message:msg delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
     [alert show];
 }
 
